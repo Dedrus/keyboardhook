@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace BeOpen.Devices.KeyboardListener
+namespace KeyboardListener
 {
     [StructLayout(LayoutKind.Sequential)]
     internal struct LowLevelKeyboardInputEvent

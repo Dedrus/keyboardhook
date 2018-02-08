@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BeOpen.Devices.KeyboardListener
+namespace KeyboardListener
 {
     public class NewStringEventArgs : EventArgs
     {

@@ -1,9 +1,11 @@
-﻿namespace BeOpen.Devices.KeyboardListener
+﻿namespace KeyboardListener
 {
     public enum ReadStrategy
     {
+        Disabled,
         DependsOnSymbols,
         DependsOnLength,
-        DependsOnEnter
+        DependsOnEnter,
+        
     };
 }

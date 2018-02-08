@@ -96,9 +96,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BeOpen.Devices.KeyboardListener\BeOpen.Devices.KeyboardListener.csproj">
+    <ProjectReference Include="..\KeyboardListener\KeyboardListener.csproj">
       <Project>{a3b4be15-0f1a-49dc-a214-ac987ce15b9a}</Project>
-      <Name>BeOpen.Devices.KeyboardListener</Name>
+      <Name>KeyboardListener</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

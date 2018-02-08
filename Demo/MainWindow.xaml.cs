@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using BeOpen.Devices.KeyboardListener;
+using KeyboardListener;
 
 namespace Demo
 {
@@ -8,11 +8,11 @@ namespace Demo
     /// </summary>
     public partial class MainWindow : Window
     {
-        private KeyboardListener _listener;
+        private KeyboardListener.KeyboardListener _listener;
         public MainWindow()
         {
             InitializeComponent();
-            _listener = new KeyboardListener(5);
+            _listener = new KeyboardListener.KeyboardListener(5);
             _listener.NewText += _listener_NewText;
             Closed += MainWindow_Closed;
         }

@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace BeOpen.Devices.KeyboardListener
+namespace KeyboardListener
 {
     internal class GlobalKeyboardHookEventArgs : HandledEventArgs
     {

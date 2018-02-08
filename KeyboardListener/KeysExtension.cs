@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace BeOpen.Devices.KeyboardListener
+namespace KeyboardListener
 {
     internal static class KeysExtension
     {

@@ -1,4 +1,4 @@
-﻿namespace BeOpen.Devices.KeyboardListener
+﻿namespace KeyboardListener
 {
     public enum KeyboardState
     {

@@ -3,14 +3,13 @@ using System.Diagnostics;
 using System.Text;
 using System.Windows.Forms;
 
-namespace BeOpen.Devices.KeyboardListener
+namespace KeyboardListener
 {
     public class KeyboardListener : IDisposable
     {
         private readonly StringBuilder _buffer = new StringBuilder();
         private readonly GlobalKeyboardHook _hook;
         private bool _shiftPressed;
-
         public char EndSymbol { get; private set; }
 
         public char StartSymbol { get; private set; }
@@ -18,7 +17,6 @@ namespace BeOpen.Devices.KeyboardListener
         public int StringLength { get; private set; }
 
         public ReadStrategy Strategy { get; private set; }
-
         /// <summary>
         ///     Creates new intanse of <see cref="KeyboardListener" />. New Text event will be fired on string with passed length.
         /// </summary>
@@ -52,9 +50,16 @@ namespace BeOpen.Devices.KeyboardListener
         /// <summary>
         ///     Creates new intanse of <see cref="KeyboardListener" />. New Text event will be fired on Enter.
         /// </summary>
-        public KeyboardListener()
+        public KeyboardListener(bool fireNewTextOnEnter = false)
         {
-            Strategy = ReadStrategy.DependsOnEnter;
+            if (fireNewTextOnEnter)
+            {
+                Strategy = ReadStrategy.DependsOnEnter;
+            }
+            else
+            {
+                Strategy = ReadStrategy.Disabled;
+            }
             _hook = new GlobalKeyboardHook();
             _hook.KeyboardPressed += KeyPressed;
         }
@@ -65,13 +70,13 @@ namespace BeOpen.Devices.KeyboardListener
             _hook.KeyboardPressed -= KeyPressed;
             _hook?.Dispose();
         }
-
         public event EventHandler<NewStringEventArgs> NewText;
+
+        public event EventHandler<NewSymbolEventArgs> NewSymbol;
         [DebuggerStepThrough]
         private void KeyPressed(object sender, GlobalKeyboardHookEventArgs e)
         {
-            var pressedKey = (Keys) e.KeyboardData.VirtualCode;
-            Debug.WriteLine($"Pressed key:{pressedKey}");
+            var pressedKey = (Keys)e.KeyboardData.VirtualCode;
             if (pressedKey == Keys.LShiftKey)
             {
                 _shiftPressed = e.KeyboardState == KeyboardState.KeyDown;
@@ -85,6 +90,7 @@ namespace BeOpen.Devices.KeyboardListener
             if (pressedKey.TryToChar(_shiftPressed, out resultSymbol))
             {
                 AppendBuffer(resultSymbol, Strategy);
+                NewSymbol?.Invoke(this, new NewSymbolEventArgs(resultSymbol));
             }
             CheckBuffer(Strategy, pressedKey);
         }
@@ -93,7 +99,7 @@ namespace BeOpen.Devices.KeyboardListener
         {
             if (strategy == ReadStrategy.DependsOnSymbols)
             {
-                if (_buffer.Length==0 && result == StartSymbol)
+                if (_buffer.Length == 0 && result == StartSymbol)
                 {
                     _buffer.Append(result);
                     return;
@@ -116,8 +122,8 @@ namespace BeOpen.Devices.KeyboardListener
                     {
                         var text = _buffer.ToString();
                         _buffer.Clear();
-                            NewText?.Invoke(this, new NewStringEventArgs(text));
-                        
+                        NewText?.Invoke(this, new NewStringEventArgs(text));
+
                     }
                     break;
                 }
@@ -131,7 +137,7 @@ namespace BeOpen.Devices.KeyboardListener
                             var text = _buffer.ToString();
                             _buffer.Clear();
                             NewText?.Invoke(this, new NewStringEventArgs(text));
-                            }
+                        }
                     }
                     break;
                 }
@@ -142,7 +148,7 @@ namespace BeOpen.Devices.KeyboardListener
                         var text = _buffer.ToString();
                         _buffer.Clear();
                         NewText?.Invoke(this, new NewStringEventArgs(text));
-                        }
+                    }
                     break;
                 }
             }
